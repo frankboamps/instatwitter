@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  HomeFeedViewController.h
 //  instatwitter
 //
 //  Created by frankboamps on 7/8/19.
@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-- (IBAction)usernameField:(id)sender;
-- (IBAction)passwordField:(id)sender;
+NS_ASSUME_NONNULL_BEGIN
+
+@interface HomeFeedViewController : UIViewController
 
 @end
 
+NS_ASSUME_NONNULL_END

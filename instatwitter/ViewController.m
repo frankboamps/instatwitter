@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import <Parse/Parse.h>
 
 @interface ViewController ()
 
@@ -19,5 +20,14 @@
     // Do any additional setup after loading the view.
 }
 
+- (void)registerUser {
 
+}
+
+
+- (IBAction)usernameField:(id)sender {
+}
+
+- (IBAction)passwordField:(id)sender {
+}
 @end
