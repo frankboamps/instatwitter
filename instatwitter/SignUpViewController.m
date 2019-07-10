@@ -15,12 +15,13 @@
 
 @implementation SignUpViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 }
 
-- (IBAction)registerUser:(id)sender {
+- (IBAction)registerUser:(id)sender
+{
     PFUser *newUser = [PFUser user];
     newUser.username = self.signupUsernameField.text;
     newUser.email = self.signupEmailField.text;
@@ -30,10 +31,15 @@
             NSLog(@"Error: %@", error.localizedDescription);
         } else {
             NSLog(@"User registered successfully");
+            [self dismissViewControllerAnimated:YES completion:nil];
+            [self.delegate signUpViewControllerDidFinish:self];
         }
     }];
 }
-
+- (IBAction)didTapBackButton:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 /*
 #pragma mark - Navigation

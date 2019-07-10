@@ -9,12 +9,18 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
+@class SignUpViewController;
+
+@protocol SignUpViewController <NSObject>
+-(void) signUpViewControllerDidFinish: (SignUpViewController *) signUpViewController;
+@end
 
 @interface SignUpViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITextField *signupEmailField;
 @property (weak, nonatomic) IBOutlet UITextField *signupUsernameField;
 @property (weak, nonatomic) IBOutlet UITextField *signupPasswordField;
+@property(weak, nonatomic) id<SignUpViewController>delegate;
 
 @end
 
