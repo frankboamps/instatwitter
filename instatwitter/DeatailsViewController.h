@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DeatailsViewController : UIViewController
 @property(strong, nonatomic) Post *post;
+@property (weak, nonatomic) IBOutlet UILabel *postCreatedAtLabel;
 
 @end
 

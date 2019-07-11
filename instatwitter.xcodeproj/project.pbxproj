@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0C8E47A34F2B38E354F91888 /* Pods_instatwitterTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 159CB0640B7A26A46D320C47 /* Pods_instatwitterTests.framework */; };
 		257D2D6622D6917300694AC0 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 257D2D6522D6917300694AC0 /* ProfileViewController.m */; };
+		257D2D6922D6B89A00694AC0 /* InfiniteScrollActivityView.m in Sources */ = {isa = PBXBuildFile; fileRef = 257D2D6822D6B89A00694AC0 /* InfiniteScrollActivityView.m */; };
+		257D2D6C22D7AD1500694AC0 /* InstaCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 257D2D6B22D7AD1500694AC0 /* InstaCollectionCell.m */; };
 		25EA4F7222D3FB830018A522 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EA4F7122D3FB830018A522 /* AppDelegate.m */; };
 		25EA4F7822D3FB830018A522 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25EA4F7622D3FB830018A522 /* Main.storyboard */; };
 		25EA4F7D22D3FB840018A522 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25EA4F7B22D3FB840018A522 /* LaunchScreen.storyboard */; };
@@ -50,6 +52,10 @@
 		159CB0640B7A26A46D320C47 /* Pods_instatwitterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_instatwitterTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		257D2D6422D6917300694AC0 /* ProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		257D2D6522D6917300694AC0 /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		257D2D6722D6B89A00694AC0 /* InfiniteScrollActivityView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InfiniteScrollActivityView.h; sourceTree = "<group>"; };
+		257D2D6822D6B89A00694AC0 /* InfiniteScrollActivityView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InfiniteScrollActivityView.m; sourceTree = "<group>"; };
+		257D2D6A22D7AD1500694AC0 /* InstaCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InstaCollectionCell.h; sourceTree = "<group>"; };
+		257D2D6B22D7AD1500694AC0 /* InstaCollectionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InstaCollectionCell.m; sourceTree = "<group>"; };
 		25EA4F6D22D3FB830018A522 /* instatwitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = instatwitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25EA4F7022D3FB830018A522 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		25EA4F7122D3FB830018A522 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -158,6 +164,10 @@
 				25EA4FA522D412AD0018A522 /* LoginViewController.m */,
 				25EA4FA722D412D80018A522 /* HomeFeedViewController.h */,
 				25EA4FA822D412D80018A522 /* HomeFeedViewController.m */,
+				257D2D6A22D7AD1500694AC0 /* InstaCollectionCell.h */,
+				257D2D6B22D7AD1500694AC0 /* InstaCollectionCell.m */,
+				257D2D6722D6B89A00694AC0 /* InfiniteScrollActivityView.h */,
+				257D2D6822D6B89A00694AC0 /* InfiniteScrollActivityView.m */,
 				25EA4FAA22D412E80018A522 /* ComposeViewController.h */,
 				25EA4FAB22D412E80018A522 /* ComposeViewController.m */,
 				25EA4FB022D534C30018A522 /* Post.h */,
@@ -434,7 +444,9 @@
 				257D2D6622D6917300694AC0 /* ProfileViewController.m in Sources */,
 				25EA4F8022D3FB840018A522 /* main.m in Sources */,
 				25EA4FAF22D418500018A522 /* SignUpViewController.m in Sources */,
+				257D2D6C22D7AD1500694AC0 /* InstaCollectionCell.m in Sources */,
 				25EA4F7222D3FB830018A522 /* AppDelegate.m in Sources */,
+				257D2D6922D6B89A00694AC0 /* InfiniteScrollActivityView.m in Sources */,
 				25EA4FB222D534C30018A522 /* Post.m in Sources */,
 				25EA4FB822D634FE0018A522 /* DeatailsViewController.m in Sources */,
 			);

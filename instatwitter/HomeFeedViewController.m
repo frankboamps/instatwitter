@@ -12,17 +12,21 @@
 #import "Post.h"
 #import "InataPostTableViewCell.h"
 #import "DeatailsViewController.h"
+#import <UIKit/UIKit.h>
+#import "InfiniteScrollActivityView.h"
 
-
-@interface HomeFeedViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface HomeFeedViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *instaPostTableView;
-
 @property(strong, nonatomic) NSMutableArray *postArray;
 @property(strong, nonatomic) UIRefreshControl *refreshControl;
+@property (assign, nonatomic) BOOL isMoreDataLoading;
 
 @end
 
 @implementation HomeFeedViewController
+
+bool isMoreDataLoading = NO;
+InfiniteScrollActivityView *loadingMoreView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -32,12 +36,22 @@
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(beginRefresh:) forControlEvents:UIControlEventValueChanged];
     [self.instaPostTableView insertSubview:self.refreshControl atIndex:0];
+    
+    
+    
+    CGRect frame = CGRectMake(0, self.instaPostTableView.contentSize.height, self.instaPostTableView.bounds.size.width, InfiniteScrollActivityView.defaultHeight);
+    loadingMoreView = [[InfiniteScrollActivityView alloc] initWithFrame:frame];
+    loadingMoreView.hidden = true;
+    [self.instaPostTableView addSubview:loadingMoreView];
+    UIEdgeInsets insets = self.instaPostTableView.contentInset;
+    insets.bottom += InfiniteScrollActivityView.defaultHeight;
+    self.instaPostTableView.contentInset = insets;
 }
 
 
- - (IBAction)didTapLogoutButton:(id)sender {
-     [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
-         
+ - (IBAction)didTapLogoutButton:(id)sender
+{
+     [PFUser logOutInBackgroundWithBlock:^(NSError *_Nullable error) {
          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
          LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
          [self presentViewController:loginViewController animated:YES completion:nil];
@@ -46,18 +60,18 @@
 
 -(void) constructQuery
 {
-PFQuery *query = [PFQuery queryWithClassName:@"Post"];
-query.limit = 20;
-[query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
-    if (posts != nil) {
-        self.postArray = [NSMutableArray arrayWithArray:posts];
-        NSLog(@"%@", posts);
-    } else {
-        NSLog(@"%@", error.localizedDescription);
-    }
-    [self.refreshControl endRefreshing];
-    [self.instaPostTableView  reloadData];
-}];
+    PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+    [query includeKey:@"author"];
+    query.limit = 20;
+    [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
+        if (posts != nil) {
+            self.postArray = [NSMutableArray arrayWithArray:posts];
+        } else {
+            NSLog(@"%@", error.localizedDescription);
+        }
+        [self.refreshControl endRefreshing];
+        [self.instaPostTableView  reloadData];
+    }];
 }
 
 
@@ -67,13 +81,13 @@ query.limit = 20;
     Post *post = self.postArray[indexPath.row];
     //cell.delegate = self;
     PFFileObject *userImageFile = post.image;
-    [userImageFile getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+    [userImageFile getDataInBackgroundWithBlock:^(NSData *_Nullable data, NSError *_Nullable error) {
         if (!error) {
             cell.feedPostImageView.image = [UIImage imageWithData:data];
         }
     }];
     cell.feedCaptionLabel.text = post.caption;
-    cell.postUserName.text = [NSString stringWithFormat:@"%@", post.author];
+    cell.postUserName.text = post.author.username;
     return cell;
 }
 
@@ -82,59 +96,53 @@ query.limit = 20;
     return  self.postArray.count;
 }
 
-- (void)beginRefresh:(UIRefreshControl *)refreshControl
-{
-    
-//     Create NSURL and NSURLRequest
-//
-//    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
-//                                                          delegate:nil
-//                                                     delegateQueue:[NSOperationQueue mainQueue]];
-//    session.configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
-//
-//    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-//                                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-    
-                                                // ... Use the new data to update the data source ...
-                                                
-                                                // Reload the tableView now that there is new data
-    [self constructQuery];
-//                                                [self.instaPostTableView reloadData];
-//
-//                                                // Tell the refreshControl to stop spinning
-//                                                [refreshControl endRefreshing];
-//
-//                                                [self.instaPostTableView  reloadData];
-//
-   //                                         }];
-    
- //   [task resume];
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//    UITableViewHeaderFooterView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderViewIdentifier];
+//    header.textLabel.text = [data[section] firstObject];
+//    return header;
+//}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 30;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self performSegueWithIdentifier:@"detailView" sender:self];
+
+- (void)beginRefresh:(UIRefreshControl *)refreshControl
+{
+    [self constructQuery];
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if(!self.isMoreDataLoading){
+        int scrollViewContentHeight = self.instaPostTableView.contentSize.height;
+        int scrollOffsetThreshold = scrollViewContentHeight - self.instaPostTableView.bounds.size.height;
+        if(scrollView.contentOffset.y > scrollOffsetThreshold && self.instaPostTableView.isDragging) {
+            self.isMoreDataLoading = true;
+            CGRect frame = CGRectMake(0, self.instaPostTableView.contentSize.height, self.instaPostTableView.bounds.size.width, InfiniteScrollActivityView.defaultHeight);
+            loadingMoreView.frame = frame;
+            [loadingMoreView startAnimating];
+           // [self loadMoreData];
+        }
+    }
+}
+
+-(void)loadMoreData{
+    [self constructQuery];
+}
+
 
 
 #pragma mark - Navigation
-
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-     if ([[segue identifier] isEqualToString:@"detailView"]){
+    if ([[segue identifier] isEqualToString:@"detailView"]){
         UITableViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.instaPostTableView indexPathForCell:tappedCell];
-        
-        // Post *post = self.postArray[indexPath.row];
-         DeatailsViewController *detailViewController = [segue destinationViewController];
-        detailViewController.post = self.postArray[indexPath.row];
+        DeatailsViewController *detailViewController = [segue destinationViewController];
+        Post *post = self.postArray[indexPath.row];
+        detailViewController.post = post;
     }
-    
-    
 }
-
-
-
 
 @end
