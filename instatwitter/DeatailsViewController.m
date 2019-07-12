@@ -33,12 +33,12 @@
    //self.postCreatedAtLabel.text = self.post.createdAt;
     NSString *pastTime;
     NSDate *now = [NSDate date];
-    NSDate *tweetDate = self.post.createdAt;
-    long monthDiff = [now monthsFrom:tweetDate];
-    long dayDiff = [now daysFrom:tweetDate];
-    long hourDiff = [now hoursFrom:tweetDate];
-    long minuteDiff = [now minutesFrom:tweetDate];
-    long secondDiff = [now secondsFrom:tweetDate];
+    NSDate *postDate = self.post.createdAt;
+    long monthDiff = [now monthsFrom:postDate];
+    long dayDiff = [now daysFrom:postDate];
+    long hourDiff = [now hoursFrom:postDate];
+    long minuteDiff = [now minutesFrom:postDate];
+    long secondDiff = [now secondsFrom:postDate];
     if (monthDiff == 0){
         if (dayDiff != 0){
 //            NSLog(@"%l", dayDiff);

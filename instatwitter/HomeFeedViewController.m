@@ -14,6 +14,8 @@
 #import "DeatailsViewController.h"
 #import <UIKit/UIKit.h>
 #import "InfiniteScrollActivityView.h"
+#import "UIImageView+AFNetworking.h"
+
 
 @interface HomeFeedViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *instaPostTableView;
@@ -28,7 +30,8 @@
 bool isMoreDataLoading = NO;
 InfiniteScrollActivityView *loadingMoreView;
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     [self constructQuery];
     self.instaPostTableView.delegate = self;
@@ -36,9 +39,6 @@ InfiniteScrollActivityView *loadingMoreView;
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(beginRefresh:) forControlEvents:UIControlEventValueChanged];
     [self.instaPostTableView insertSubview:self.refreshControl atIndex:0];
-    
-    
-    
     CGRect frame = CGRectMake(0, self.instaPostTableView.contentSize.height, self.instaPostTableView.bounds.size.width, InfiniteScrollActivityView.defaultHeight);
     loadingMoreView = [[InfiniteScrollActivityView alloc] initWithFrame:frame];
     loadingMoreView.hidden = true;
@@ -49,19 +49,21 @@ InfiniteScrollActivityView *loadingMoreView;
 }
 
 
- - (IBAction)didTapLogoutButton:(id)sender
+- (IBAction)didTapLogoutButton:(id)sender
 {
-     [PFUser logOutInBackgroundWithBlock:^(NSError *_Nullable error) {
-         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-         LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-         [self presentViewController:loginViewController animated:YES completion:nil];
-     }];
- }
+    [PFUser logOutInBackgroundWithBlock:^(NSError *_Nullable error) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        [self presentViewController:loginViewController animated:YES completion:nil];
+    }];
+}
+
 
 -(void) constructQuery
 {
     PFQuery *query = [PFQuery queryWithClassName:@"Post"];
     [query includeKey:@"author"];
+    [query orderByDescending:@"createdAt"];
     query.limit = 20;
     [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
         if (posts != nil) {
@@ -79,7 +81,6 @@ InfiniteScrollActivityView *loadingMoreView;
 {
     InataPostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"instaCell" forIndexPath:indexPath];
     Post *post = self.postArray[indexPath.row];
-    //cell.delegate = self;
     PFFileObject *userImageFile = post.image;
     [userImageFile getDataInBackgroundWithBlock:^(NSData *_Nullable data, NSError *_Nullable error) {
         if (!error) {
@@ -88,22 +89,18 @@ InfiniteScrollActivityView *loadingMoreView;
     }];
     cell.feedCaptionLabel.text = post.caption;
     cell.postUserName.text = post.author.username;
+    //cell.postUserImage.image =  post.author[@"profileImage"];
+    PFFileObject *authorProfilePicture = post.author[@"profileImage"];
+    NSURL *authorProfilePictureURL = [NSURL URLWithString:authorProfilePicture.url];
+    cell.postUserImage.image = nil;
+    [cell.postUserImage setImageWithURL:authorProfilePictureURL];
     return cell;
 }
+
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return  self.postArray.count;
-}
-
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//    UITableViewHeaderFooterView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderViewIdentifier];
-//    header.textLabel.text = [data[section] firstObject];
-//    return header;
-//}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 30;
 }
 
 
@@ -111,6 +108,7 @@ InfiniteScrollActivityView *loadingMoreView;
 {
     [self constructQuery];
 }
+
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -122,13 +120,29 @@ InfiniteScrollActivityView *loadingMoreView;
             CGRect frame = CGRectMake(0, self.instaPostTableView.contentSize.height, self.instaPostTableView.bounds.size.width, InfiniteScrollActivityView.defaultHeight);
             loadingMoreView.frame = frame;
             [loadingMoreView startAnimating];
-           // [self loadMoreData];
         }
     }
 }
 
--(void)loadMoreData{
+-(void)loadMoreData
+{
     [self constructQuery];
+}
+
+-(void)refreshData{
+    PFQuery *postQuery = [Post query];
+    [postQuery orderByDescending:@"createdAt"];
+    [postQuery includeKey:@"author"];
+    postQuery.limit = 20;
+    [postQuery findObjectsInBackgroundWithBlock:^(NSArray<Post *> * _Nullable posts, NSError * _Nullable error) {
+        if (posts) {
+            self.postArray = posts;
+            [self.instaPostTableView reloadData];
+        }
+        else {
+        }
+        [self.refreshControl endRefreshing];
+    }];
 }
 
 

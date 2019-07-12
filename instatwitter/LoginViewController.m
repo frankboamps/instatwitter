@@ -20,7 +20,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 }
 
 - (IBAction)loginUser:(id)sender
@@ -37,7 +36,8 @@
         }
     }];
 }
-- (IBAction)tapGestureToMakeKeyboardDisappear:(id)sender {
+- (IBAction)tapGestureToMakeKeyboardDisappear:(id)sender
+{
     [self.view endEditing:YES];
 }
 

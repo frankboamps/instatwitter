@@ -8,17 +8,26 @@
 
 #import "ComposeViewController.h"
 #import "Post.h"
+#import "HomeFeedViewController.h"
+#import "MBProgressHUD.h"
 
-@interface ComposeViewController ()
+
+@interface ComposeViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *composeImage;
+@property (strong, nonatomic) UIImage *originalImage;
+@property (strong, nonatomic) UIImage *editedImage;
 
 @end
 
 @implementation ComposeViewController
+static NSString *const textViewPlaceholderText = @"Write a description for your photo!";
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.postTextField.delegate = self;
+    //self.postTextField.placeholder = textViewPlaceholderText;
+   // self.postTextField.placeholderColor = [UIColor lightGrayColor];
 }
 
 - (IBAction)whenPhotoIsTapped:(id)sender
@@ -26,7 +35,7 @@
     UIImagePickerController *imagePickerVC = [UIImagePickerController new];
     imagePickerVC.delegate = self;
     imagePickerVC.allowsEditing = YES;
-    // imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+    imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
     [self presentViewController:imagePickerVC animated:YES completion:nil];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -39,11 +48,12 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
-    UIImage *editedImage = info[UIImagePickerControllerEditedImage];
-    [self resizeImage:editedImage withSize:CGSizeMake(14, 14)];
-    self.postImage.image = editedImage;
-    self.composeImage.image = editedImage;
+    self.originalImage = info[UIImagePickerControllerOriginalImage];
+    self.editedImage = info[UIImagePickerControllerEditedImage];
+//    [self resizeImage:self.editedImage withSize:CGSizeMake(14, 14)];
+//    self.postImage.image = editedImage;
+//    self.composeImage.image = editedImage;
+    [self.postImage setImage:self.editedImage];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -61,15 +71,22 @@
 
 - (IBAction)shareButtonTapped:(id)sender
 {
-    [Post postUserImage:self.postImage.image withCaption:self.postTextField.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-        if (succeeded){
-            NSLog(@"Succeeded");
-        }
-        else{
-            NSLog(@"Failed");
-        }
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }];}
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [Post postUserImage:self.editedImage withCaption:self.postTextField.text withCompletion:nil];
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
+    [self dismissViewControllerAnimated:true completion:^{
+        [self.delegate didPost];
+    }];
+//    [Post postUserImage:self.postImage.image withCaption:self.postTextField.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+//        if (succeeded){
+//            NSLog(@"Succeeded");
+//        }
+//        else{
+//            NSLog(@"Failed");
+//        }
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//    }];
+}
 
 - (IBAction)cancelButtonTapped:(id)sender
 {
