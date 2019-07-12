@@ -120,6 +120,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		257D2D6D22D832BA00694AC0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		2598E7901BDE7510011AF57E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -161,6 +168,7 @@
 				25EA4F7022D3FB830018A522 /* AppDelegate.h */,
 				25EA4F7122D3FB830018A522 /* AppDelegate.m */,
 				25EA4FA422D412AD0018A522 /* LoginViewController.h */,
+				257D2D6D22D832BA00694AC0 /* Views */,
 				25EA4FA522D412AD0018A522 /* LoginViewController.m */,
 				25EA4FA722D412D80018A522 /* HomeFeedViewController.h */,
 				25EA4FA822D412D80018A522 /* HomeFeedViewController.m */,

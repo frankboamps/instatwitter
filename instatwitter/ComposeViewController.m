@@ -9,7 +9,7 @@
 #import "ComposeViewController.h"
 #import "Post.h"
 #import "HomeFeedViewController.h"
-#import "MBProgressHUD.h"
+#import "JGProgressHUD.h"
 
 
 @interface ComposeViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate>
@@ -35,7 +35,7 @@ static NSString *const textViewPlaceholderText = @"Write a description for your 
     UIImagePickerController *imagePickerVC = [UIImagePickerController new];
     imagePickerVC.delegate = self;
     imagePickerVC.allowsEditing = YES;
-    imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+   // imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
     [self presentViewController:imagePickerVC animated:YES completion:nil];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -49,7 +49,8 @@ static NSString *const textViewPlaceholderText = @"Write a description for your 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
     self.originalImage = info[UIImagePickerControllerOriginalImage];
-    self.editedImage = info[UIImagePickerControllerEditedImage];
+    self.editedImage = [self resizeImage:self.originalImage withSize:CGSizeMake(400, 400)];
+   // self.editedImage = info[UIImagePickerControllerEditedImage];
 //    [self resizeImage:self.editedImage withSize:CGSizeMake(14, 14)];
 //    self.postImage.image = editedImage;
 //    self.composeImage.image = editedImage;
@@ -71,30 +72,26 @@ static NSString *const textViewPlaceholderText = @"Write a description for your 
 
 - (IBAction)shareButtonTapped:(id)sender
 {
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [Post postUserImage:self.editedImage withCaption:self.postTextField.text withCompletion:nil];
-    [MBProgressHUD hideHUDForView:self.view animated:YES];
-    [self dismissViewControllerAnimated:true completion:^{
-        [self.delegate didPost];
+    JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+    [HUD showInView:self.view];
+   // [JProgressHUD showHUDAddedTo:self.view animated:YES];
+    [Post postUserImage:self.editedImage withCaption:self.postTextField.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if(succeeded){
+            [HUD dismissAnimated:YES];
+            [self dismissViewControllerAnimated:true completion:^{
+                [self.delegate didPost];
+            }];
+        }
+        else{
+            [HUD dismissAnimated:YES];
+        }
     }];
-//    [Post postUserImage:self.postImage.image withCaption:self.postTextField.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-//        if (succeeded){
-//            NSLog(@"Succeeded");
-//        }
-//        else{
-//            NSLog(@"Failed");
-//        }
-//        [self dismissViewControllerAnimated:YES completion:nil];
-//    }];
 }
 
 - (IBAction)cancelButtonTapped:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
-
-
 
 /*
  #pragma mark - Navigation
