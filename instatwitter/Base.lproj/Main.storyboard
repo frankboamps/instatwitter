@@ -112,7 +112,7 @@
                                                     </constraints>
                                                     <state key="normal" title="Button" image="favorite_button"/>
                                                     <connections>
-                                                        <action selector="didTapFavoriteButton:" destination="aId-Yg-qts" eventType="touchUpInside" id="DBc-m2-xn9"/>
+                                                        <action selector="didTapLike:" destination="aId-Yg-qts" eventType="touchUpInside" id="Gjc-EH-mIe"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i1K-34-ZnX">
@@ -190,8 +190,10 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="commentButton" destination="DjA-HI-VFz" id="llj-qP-xr7"/>
                                             <outlet property="feedCaptionLabel" destination="i1K-34-ZnX" id="Yu8-lH-E1f"/>
                                             <outlet property="feedPostImageView" destination="a7y-xW-U1Y" id="6vL-Gg-GRa"/>
+                                            <outlet property="likeButton" destination="1jc-R9-0pc" id="O3k-VX-q1c"/>
                                             <outlet property="postCommentCount" destination="zCh-kb-cAj" id="8li-bO-0z7"/>
                                             <outlet property="postFavoriteCount" destination="ifT-jI-aTS" id="iqU-gS-nDU"/>
                                             <outlet property="postUserImage" destination="phU-PS-8vt" id="e4N-ss-5YD"/>
@@ -540,7 +542,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eWo-dZ-eLO">
                                 <rect key="frame" x="33" y="20" width="34" height="30"/>

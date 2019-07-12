@@ -123,8 +123,40 @@
 		257D2D6D22D832BA00694AC0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				257D2D6A22D7AD1500694AC0 /* InstaCollectionCell.h */,
+				257D2D6B22D7AD1500694AC0 /* InstaCollectionCell.m */,
+				25EA4FB322D56C330018A522 /* InataPostTableViewCell.h */,
+				25EA4FB422D56C330018A522 /* InataPostTableViewCell.m */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		257D2D6E22D8340900694AC0 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				25EA4FA422D412AD0018A522 /* LoginViewController.h */,
+				25EA4FA522D412AD0018A522 /* LoginViewController.m */,
+				25EA4FA722D412D80018A522 /* HomeFeedViewController.h */,
+				25EA4FA822D412D80018A522 /* HomeFeedViewController.m */,
+				25EA4FAA22D412E80018A522 /* ComposeViewController.h */,
+				25EA4FAB22D412E80018A522 /* ComposeViewController.m */,
+				25EA4FB622D634FE0018A522 /* DeatailsViewController.h */,
+				25EA4FB722D634FE0018A522 /* DeatailsViewController.m */,
+				257D2D6422D6917300694AC0 /* ProfileViewController.h */,
+				257D2D6522D6917300694AC0 /* ProfileViewController.m */,
+				25EA4FAD22D418500018A522 /* SignUpViewController.h */,
+				25EA4FAE22D418500018A522 /* SignUpViewController.m */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		257D2D6F22D8482600694AC0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				25EA4FB022D534C30018A522 /* Post.h */,
+				25EA4FB122D534C30018A522 /* Post.m */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		2598E7901BDE7510011AF57E /* Pods */ = {
@@ -167,29 +199,13 @@
 			children = (
 				25EA4F7022D3FB830018A522 /* AppDelegate.h */,
 				25EA4F7122D3FB830018A522 /* AppDelegate.m */,
-				25EA4FA422D412AD0018A522 /* LoginViewController.h */,
+				257D2D6E22D8340900694AC0 /* ViewControllers */,
 				257D2D6D22D832BA00694AC0 /* Views */,
-				25EA4FA522D412AD0018A522 /* LoginViewController.m */,
-				25EA4FA722D412D80018A522 /* HomeFeedViewController.h */,
-				25EA4FA822D412D80018A522 /* HomeFeedViewController.m */,
-				257D2D6A22D7AD1500694AC0 /* InstaCollectionCell.h */,
-				257D2D6B22D7AD1500694AC0 /* InstaCollectionCell.m */,
 				257D2D6722D6B89A00694AC0 /* InfiniteScrollActivityView.h */,
 				257D2D6822D6B89A00694AC0 /* InfiniteScrollActivityView.m */,
-				25EA4FAA22D412E80018A522 /* ComposeViewController.h */,
-				25EA4FAB22D412E80018A522 /* ComposeViewController.m */,
-				25EA4FB022D534C30018A522 /* Post.h */,
-				25EA4FB122D534C30018A522 /* Post.m */,
+				257D2D6F22D8482600694AC0 /* Models */,
 				25EA4F7622D3FB830018A522 /* Main.storyboard */,
-				25EA4FB622D634FE0018A522 /* DeatailsViewController.h */,
-				25EA4FB722D634FE0018A522 /* DeatailsViewController.m */,
-				257D2D6422D6917300694AC0 /* ProfileViewController.h */,
-				257D2D6522D6917300694AC0 /* ProfileViewController.m */,
-				25EA4FAD22D418500018A522 /* SignUpViewController.h */,
-				25EA4FAE22D418500018A522 /* SignUpViewController.m */,
 				25EA4FA222D40B1C0018A522 /* Assets.xcassets */,
-				25EA4FB322D56C330018A522 /* InataPostTableViewCell.h */,
-				25EA4FB422D56C330018A522 /* InataPostTableViewCell.m */,
 				25EA4F7B22D3FB840018A522 /* LaunchScreen.storyboard */,
 				25EA4F7E22D3FB840018A522 /* Info.plist */,
 				25EA4F7F22D3FB840018A522 /* main.m */,

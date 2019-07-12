@@ -12,6 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface InstaCollectionCell : UICollectionViewCell
+
 @property (weak, nonatomic) IBOutlet UIImageView *postedImage;
 @property (strong, nonatomic) Post *post;
 

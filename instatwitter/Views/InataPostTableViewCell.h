@@ -11,20 +11,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-//@protocol InstaCellDelegate
-//- (void)instaCell:(InataPostTableViewCell *) instaCell didTap: (User *)user;
-//@end
-
 @interface InataPostTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *postUserImage;
 @property (weak, nonatomic) IBOutlet UILabel *postUserName;
-
 @property (weak, nonatomic) IBOutlet UIImageView *feedPostImageView;
 @property (weak, nonatomic) IBOutlet UILabel *feedCaptionLabel;
+@property (weak, nonatomic) IBOutlet UIButton *commentButton;
 @property (weak, nonatomic) IBOutlet UILabel *postFavoriteCount;
+@property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (weak, nonatomic) IBOutlet UILabel *postCommentCount;
 
-//@property (nonatomic, weak) id<InstaCellDelegate> delegate;
+@property (strong, nonatomic) Post *post;
 
 @end
 

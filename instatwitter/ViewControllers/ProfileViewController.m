@@ -8,9 +8,7 @@
 
 #import "ProfileViewController.h"
 #import "UIImageView+AFNetworking.h"
-#import "HomeFeedViewController.h"
 #import <Parse/Parse.h>
-#import "LoginViewController.h"
 #import "Post.h"
 #import "InstaCollectionCell.h"
 #import "InataPostTableViewCell.h"
@@ -27,6 +25,8 @@
 @end
 
 @implementation ProfileViewController
+
+#pragma mark - ViewController Lifecycle
 
 - (void)viewDidLoad
 {
@@ -51,6 +51,7 @@
     [self refreshData];
 }
 
+#pragma mark - Setting up tap buttons
 
 - (IBAction)didTapNoProfile:(id)sender
 {
@@ -67,6 +68,15 @@
     }
 }
 
+- (IBAction)didTapEditProfileButton:(id)sender
+{
+    PFFileObject *PFObjectProfileImage = [PFUser currentUser][@"profileImage"];
+    NSURL *profileImageURL = [NSURL URLWithString:PFObjectProfileImage.url];
+    self.profileImageView.image = nil;
+    [self.profileImageView setImageWithURL:profileImageURL];
+}
+
+#pragma mark - Setting photo for profile
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size
 {
@@ -83,7 +93,6 @@
     return newImage;
 }
 
-
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
     self.originalImage = info[UIImagePickerControllerOriginalImage];
@@ -94,6 +103,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - Refreshing data
 
 -(void)refreshData
 {
@@ -115,6 +125,8 @@
     }];
 }
 
+#pragma mark - Implementing UICollectionView delegate
+
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     InstaCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"instaCollectionCell" forIndexPath:indexPath];
@@ -133,15 +145,8 @@
     return self.userPostArray.count;
 }
 
-- (IBAction)didTapEditProfileButton:(id)sender
-{
-    PFFileObject *PFObjectProfileImage = [PFUser currentUser][@"profileImage"];
-    NSURL *profileImageURL = [NSURL URLWithString:PFObjectProfileImage.url];
-    self.profileImageView.image = nil;
-    [self.profileImageView setImageWithURL:profileImageURL];
-}
-
 #pragma mark - Navigation
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier  isEqual: @"postDetailSegue"]){
@@ -152,6 +157,5 @@
         postDetailsViewController.post = post;
     }
 }
-
 
 @end

@@ -16,8 +16,8 @@
 #import "InfiniteScrollActivityView.h"
 #import "UIImageView+AFNetworking.h"
 
-
 @interface HomeFeedViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UITableView *instaPostTableView;
 @property(strong, nonatomic) NSMutableArray *postArray;
 @property(strong, nonatomic) UIRefreshControl *refreshControl;
@@ -29,6 +29,8 @@
 
 bool isMoreDataLoading = NO;
 InfiniteScrollActivityView *loadingMoreView;
+
+#pragma mark - View Controller LifeCycle
 
 - (void)viewDidLoad
 {
@@ -48,6 +50,7 @@ InfiniteScrollActivityView *loadingMoreView;
     self.instaPostTableView.contentInset = insets;
 }
 
+#pragma mark - Setting up tap log out button
 
 - (IBAction)didTapLogoutButton:(id)sender
 {
@@ -58,6 +61,7 @@ InfiniteScrollActivityView *loadingMoreView;
     }];
 }
 
+#pragma mark - constructing querry to request data
 
 -(void) constructQuery
 {
@@ -76,6 +80,7 @@ InfiniteScrollActivityView *loadingMoreView;
     }];
 }
 
+#pragma mark - Setting up tableview delegates
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
@@ -89,26 +94,31 @@ InfiniteScrollActivityView *loadingMoreView;
     }];
     cell.feedCaptionLabel.text = post.caption;
     cell.postUserName.text = post.author.username;
-    //cell.postUserImage.image =  post.author[@"profileImage"];
     PFFileObject *authorProfilePicture = post.author[@"profileImage"];
     NSURL *authorProfilePictureURL = [NSURL URLWithString:authorProfilePicture.url];
     cell.postUserImage.image = nil;
     [cell.postUserImage setImageWithURL:authorProfilePictureURL];
+    if ([cell.post.usersWhoLiked containsObject:[PFUser currentUser].objectId]){
+        cell.likeButton.selected = YES;
+    } else {
+        cell.likeButton.selected = NO;
+    }
     return cell;
 }
-
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return  self.postArray.count;
 }
 
+#pragma mark - Setting up begin refreshControl
 
 - (void)beginRefresh:(UIRefreshControl *)refreshControl
 {
     [self constructQuery];
 }
 
+#pragma mark - Setting up scroll for scrollView
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -124,12 +134,14 @@ InfiniteScrollActivityView *loadingMoreView;
     }
 }
 
+#pragma mark - loading and refreshing data
 -(void)loadMoreData
 {
     [self constructQuery];
 }
 
--(void)refreshData{
+-(void)refreshData
+{
     PFQuery *postQuery = [Post query];
     [postQuery orderByDescending:@"createdAt"];
     [postQuery includeKey:@"author"];
@@ -145,11 +157,10 @@ InfiniteScrollActivityView *loadingMoreView;
     }];
 }
 
-
-
 #pragma mark - Navigation
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
     if ([[segue identifier] isEqualToString:@"detailView"]){
         UITableViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.instaPostTableView indexPathForCell:tappedCell];

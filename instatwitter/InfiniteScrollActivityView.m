@@ -18,6 +18,8 @@ static CGFloat _defaultHeight = 60.0;
     return _defaultHeight;
 }
 
+#pragma mark - Initiating scroll view and its frame
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
@@ -36,11 +38,15 @@ static CGFloat _defaultHeight = 60.0;
     return self;
 }
 
+#pragma mark - Set view layoutsubview
+
 - (void)layoutSubviews
 {
     [super layoutSubviews];
     activityIndicatorView.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
 }
+
+#pragma mark - setting up activity indicator
 
 - (void)setupActivityIndicator
 {
@@ -49,6 +55,8 @@ static CGFloat _defaultHeight = 60.0;
     activityIndicatorView.hidesWhenStopped = true;
     [self addSubview:activityIndicatorView];
 }
+
+#pragma mark - Setting animations
 
 -(void)stopAnimating
 {

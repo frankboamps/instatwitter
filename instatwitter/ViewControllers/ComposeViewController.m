@@ -11,7 +11,6 @@
 #import "HomeFeedViewController.h"
 #import "JGProgressHUD.h"
 
-
 @interface ComposeViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *composeImage;
 @property (strong, nonatomic) UIImage *originalImage;
@@ -20,22 +19,23 @@
 @end
 
 @implementation ComposeViewController
-static NSString *const textViewPlaceholderText = @"Write a description for your photo!";
+
+#pragma mark - View contoller lifecycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.postTextField.delegate = self;
-    //self.postTextField.placeholder = textViewPlaceholderText;
-   // self.postTextField.placeholderColor = [UIColor lightGrayColor];
 }
+
+#pragma mark - Setting tapped photo
 
 - (IBAction)whenPhotoIsTapped:(id)sender
 {
     UIImagePickerController *imagePickerVC = [UIImagePickerController new];
     imagePickerVC.delegate = self;
     imagePickerVC.allowsEditing = YES;
-   // imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+    // imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
     [self presentViewController:imagePickerVC animated:YES completion:nil];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -46,17 +46,17 @@ static NSString *const textViewPlaceholderText = @"Write a description for your 
     }
 }
 
+#pragma mark - Setting image picker controller
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
     self.originalImage = info[UIImagePickerControllerOriginalImage];
     self.editedImage = [self resizeImage:self.originalImage withSize:CGSizeMake(400, 400)];
-   // self.editedImage = info[UIImagePickerControllerEditedImage];
-//    [self resizeImage:self.editedImage withSize:CGSizeMake(14, 14)];
-//    self.postImage.image = editedImage;
-//    self.composeImage.image = editedImage;
     [self.postImage setImage:self.editedImage];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+#pragma mark - Resizing image
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size
 {
@@ -70,11 +70,12 @@ static NSString *const textViewPlaceholderText = @"Write a description for your 
     return newImage;
 }
 
+#pragma mark - Setting up Tap Buttons
+
 - (IBAction)shareButtonTapped:(id)sender
 {
     JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
     [HUD showInView:self.view];
-   // [JProgressHUD showHUDAddedTo:self.view animated:YES];
     [Post postUserImage:self.editedImage withCaption:self.postTextField.text withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded){
             [HUD dismissAnimated:YES];

@@ -18,10 +18,16 @@
 @dynamic likeCount;
 @dynamic commentCount;
 @dynamic profilePhoto;
+@dynamic usersWhoLiked;
 
-+ (nonnull NSString *)parseClassName {
+#pragma mark - Creating ParseClassName
+
++ (nonnull NSString *)parseClassName
+{
     return @"Post";
 }
+
+#pragma mark - Posting user image
 
 + (void) postUserImage: ( UIImage *_Nullable )image withCaption: ( NSString *_Nullable )caption withCompletion: (PFBooleanResultBlock  _Nullable)completion
 {
@@ -31,17 +37,19 @@
     newPost.caption = caption;
     newPost.likeCount = @(0);
     newPost.commentCount = @(0);
+    newPost.usersWhoLiked = @[];
     [newPost saveInBackgroundWithBlock: completion];
 }
 
-+ (PFFileObject *)getPFFileFromImage: (UIImage *_Nullable)image {
-    if (!image)
-    {
+#pragma mark - Getting PFFile
+
++ (PFFileObject *)getPFFileFromImage: (UIImage *_Nullable)image
+{
+    if (!image){
         return nil;
     }
     NSData *imageData = UIImagePNGRepresentation(image);
-    if (!imageData)
-    {
+    if (!imageData){
         return nil;
     }
     return [PFFileObject fileObjectWithName:@"image.png" data:imageData];
